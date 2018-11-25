@@ -1,13 +1,10 @@
 import React from 'react';
-import './App.css';
-import ReactDOM from 'react-dom';
 import axios from 'axios';
-
-class App extends React.Component {
+import NavbBar from './components/navbar';
+class TodoList extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			title: 'react simple crud app',
 			act: 0,
 			index: '',
 			datas: []
@@ -16,7 +13,7 @@ class App extends React.Component {
 
 	componentDidMount() {
 		axios
-			.get(`http://localhost:4000/api/tasks/` + this.state.datas)
+			.get(`http://localhost:4000/api/tasks/`)
 			.then(res => {
 				console.log(res);
 				this.setState({ datas: res.data });
@@ -29,7 +26,6 @@ class App extends React.Component {
 
 	fSubmit = e => {
 		e.preventDefault();
-		console.log('try');
 
 		let datas = this.state.datas;
 		let task = this.refs.task.value;
@@ -47,8 +43,8 @@ class App extends React.Component {
 		}
 
 		this.setState({
-			datas: datas,
-			act: 0
+			datas,
+			task: ''
 		});
 		this.refs.myform.reset();
 		this.refs.task.focus();
@@ -65,7 +61,7 @@ class App extends React.Component {
 		let datas = this.state.datas;
 		datas.splice(i, 1);
 		this.setState({
-			datas: datas
+			datas
 		});
 
 		this.refs.myform.reset();
@@ -94,10 +90,10 @@ class App extends React.Component {
 		let datas = this.state.datas;
 		return (
 			<div className="App">
-				<h1>{this.state.title}</h1>
+				<NavbBar />
 				<form id="create-course-form" ref="myform" className="Form1">
-					<input type="text" ref="task" placeholder="your task" className="formField" />
-					<button onClick={this.fSubmit} className="myButton">
+					<input className="btn btn-light m-2 btn-sm" type="text" ref="task" placeholder="Enter Task" />
+					<button onClick={this.fSubmit} className="btn btn-dark btn-sm">
 						add task
 					</button>
 				</form>
@@ -105,10 +101,10 @@ class App extends React.Component {
 					{datas.map((data, i) => (
 						<li key={i} className="myList">
 							{i + 1}. {data.task}
-							<button onClick={() => this.fRemove(data)} className="myButton">
-								remove
+							<button onClick={() => this.fRemove(data)} className="btn btn-dark btn-sm m-2">
+								Remove
 							</button>
-							<button onClick={() => this.fEdit(i)} className="myButton">
+							<button onClick={() => this.fEdit(i)} className="btn btn-dark btn-sm m-2">
 								Edit
 							</button>
 						</li>
@@ -119,6 +115,4 @@ class App extends React.Component {
 	}
 }
 
-export default App;
-
-ReactDOM.render(<App />, document.getElementById('root'));
+export default TodoList;
